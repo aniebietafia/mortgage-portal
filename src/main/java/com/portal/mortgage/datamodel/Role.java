@@ -1,4 +1,4 @@
-package com.portal.mortgage.entity;
+package com.portal.mortgage.datamodel;
 
 public enum Role {
     APPLICANT,
