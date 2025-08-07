@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
-@RequestMapping("/api/v1/applications")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 @Validated
 @Tag(name = "Mortgage Applications", description = "APIs for creating, viewing, and managing mortgage applications.")
@@ -49,7 +49,7 @@ public class ApplicationController {
         return Bucket.builder().addLimit(limit).build();
     }
 
-    @PostMapping
+    @PostMapping("/applications")
     @PreAuthorize("hasRole('APPLICANT')")
     @Operation(summary = "Create a new mortgage application", description = "Allows an authenticated applicant to submit a new application.")
     public ResponseEntity<GlobalResponse<ApplicationData>> createApplication(
@@ -66,7 +66,7 @@ public class ApplicationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/applications/{id}")
     @PreAuthorize("hasAnyRole('APPLICANT', 'OFFICER')")
     @Operation(summary = "Get an application by its ID", description = "Retrieves a single application. Applicants can only retrieve their own.")
     public ResponseEntity<GlobalResponse<ApplicationData>> getApplicationById(
@@ -83,7 +83,7 @@ public class ApplicationController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping
+    @GetMapping("/applications")
     @PreAuthorize("hasAnyRole('APPLICANT', 'OFFICER')")
     @Operation(summary = "List and filter applications", description = "Lists applications with pagination. Officers see all; applicants see only their own.")
     public ResponseEntity<Page<ApplicationData>> listApplications(
@@ -102,7 +102,7 @@ public class ApplicationController {
         return ResponseEntity.ok(page);
     }
 
-    @PatchMapping("/{id}/decision")
+    @PatchMapping("/mortgage/{id}/decision")
     @PreAuthorize("hasRole('OFFICER')")
     @Operation(summary = "Approve or reject an application", description = "Allows a credit officer to make a decision on a pending application.")
     public ResponseEntity<GlobalResponse<ApplicationData>> decideApplication(
